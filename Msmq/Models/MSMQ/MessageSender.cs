@@ -6,7 +6,7 @@ namespace webapi_msmqServer.Models.MSMQ
 {
     public class MessageSender
     {
-        public void Send(Basket ObjToSend)
+        public void Send(Message message)
         {
             var queue = QueueProvider.Instance.Queue;
 //            var message = new MsmqMessage<Basket>(ObjToSend);
@@ -15,20 +15,6 @@ namespace webapi_msmqServer.Models.MSMQ
             using (var trn = new MessageQueueTransaction())
             {
                 trn.Begin();
-                BinaryMessageFormatter formatter = new BinaryMessageFormatter();
-
-                var message = new Message
-                {
-                    Body = ObjToSend,
-                    Label = Environment.MachineName,
-                    UseDeadLetterQueue = true,
-                    Recoverable = true,
-                    Formatter = formatter,
-                    Priority = MessagePriority.Highest,
-                    TimeToBeReceived = MsmqConfiguration.ResponseTimeOut
-                };
-
-
                 queue.Send(message, MessageQueueTransactionType.Single);
                 trn.Commit();
             }
