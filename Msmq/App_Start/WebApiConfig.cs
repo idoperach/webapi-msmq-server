@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 
-namespace Msmq
+namespace webapi_msmqServer
 {
     public static class WebApiConfig
     {
